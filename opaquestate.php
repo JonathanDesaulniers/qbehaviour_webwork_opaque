@@ -138,12 +138,14 @@ class qbehaviour_opaque_state {
         $this->state->engine        = qtype_opaque_engine_manager::get()->load($question->engineid);
 
         // Set up the fields where we will store data sent back by the remote engine.
+        // Added resultstmp for correct grading in Moodle
         $this->state->questionended         = false;
         $this->state->sequencenumber        = -1;
         $this->state->resultssequencenumber = -1;
         $this->state->xhtml                 = null;
         $this->state->questionsessionid     = null;
         $this->state->results               = null;
+        $this->state->resultstmp            = null;
         $this->state->cssfilename           = null;
         $this->state->progressinfo          = null;
 
@@ -220,14 +222,20 @@ class qbehaviour_opaque_state {
      * Take first unprocessed step and send it to the engine.
      * @param question_attempt_step $step the next step of the qa being processed.
      */
+    // Use result from resultstmp for correct grading in Moodle
+    // We use results only to indicate the end of the problem
+
     public function process_next_step($step) {
         $resourcecache = $this->get_resource_cache();
 
         $processreturn = $this->get_connection()->process(
                 $this->state->questionsessionid, self::submitted_data($step));
 
+        if (!empty($processreturn->resultstmp) && empty($processreturn->results)) {
+            $this->state->resultstmp = $processreturn->resultstmp;
+        }
+
         if (!empty($processreturn->results)) {
-            $this->state->results = $processreturn->results;
             $this->state->resultssequencenumber = $this->state->sequencenumber + 1;
         }
 
@@ -322,6 +330,14 @@ class qbehaviour_opaque_state {
     public function get_xhtml() {
         $replaces = $this->get_replaces();
         return str_replace(array_keys($replaces), $replaces, $this->state->xhtml);
+    }
+
+    /**
+     * @return object resultstmp the temporary results informationfor correct
+     * grading in Moodle, if any have been returned yet.
+     */
+    public function get_resultstmp() {
+        return $this->state->resultstmp;
     }
 
     /**
