@@ -52,11 +52,15 @@ class qbehaviour_opaque_connection extends qtype_opaque_connection {
     /**
      * @param string $remoteid identifies the question.
      * @param string $remoteversion identifies the specific version of the quetsion.
+     * @param int $showhintafter identifies if we add hint in the question.
+     * @param int $showsolutionafter identifies if we add solution in the question.
+     * @param int $showsolutionaftertest identifies if we add solution when test is finished.
+     * @param int $exammode identifies if we want this to be an exam question (no correction shown).
      * @param aray $data feeds into the initialParams.
      * @param question_display_options|null $options controls how the question is displayed.
      * @return object and Opaque StartReturn structure.
      */
-    public function start($remoteid, $remoteversion, $data, $cachedresources, $options = null) {
+    public function start($remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $exammode, $data, $cachedresources, $options = null) {
 
         $initialparams = array(
             'randomseed' => $data['-_randomseed'],
@@ -80,7 +84,7 @@ class qbehaviour_opaque_connection extends qtype_opaque_connection {
             $initialparams['display_generalfeedback'] = (int) $options->generalfeedback;
         }
 
-        return $this->soapclient->start($remoteid, $remoteversion, $this->question_base_url(),
+        return $this->soapclient->start($remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $exammode, $this->question_base_url(),
                 array_keys($initialparams), array_values($initialparams), $cachedresources);
     }
 

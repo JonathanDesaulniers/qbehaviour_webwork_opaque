@@ -132,6 +132,10 @@ class qbehaviour_opaque_state {
         $this->state->engineid      = $question->engineid;
         $this->state->remoteid      = $question->remoteid;
         $this->state->remoteversion = $question->remoteversion;
+        $this->state->showhintafter = $question->showhintafter;
+        $this->state->showsolutionafter = $question->showsolutionafter;
+        $this->state->showsolutionaftertest = $question->showsolutionaftertest;
+        $this->state->exammode = $question->exammode;
         $this->state->options       = $this->make_option_string($options);
         $this->state->randomseed    = $firststep->get_behaviour_var('_randomseed');
         $this->state->nameprefix    = $qa->get_field_prefix();
@@ -145,9 +149,11 @@ class qbehaviour_opaque_state {
         $this->state->xhtml                 = null;
         $this->state->questionsessionid     = null;
         $this->state->results               = null;
-        $this->state->resultstmp            = null;
+        $this->state->resultstmp            = null;        
         $this->state->cssfilename           = null;
         $this->state->progressinfo          = null;
+		$this->state->solfeedback           = null;
+        $this->state->correctanstable        = null;
 
         // Having reloaded the engine definition, we need to re-connect.
         $this->connection = null;
@@ -188,6 +194,8 @@ class qbehaviour_opaque_state {
             // could hit the browser connection timeout. However, it is not acceptable
             // to do any output here, so there is noting we can do about that.
             // Browser time-outs tend to be about 5 minutes.
+			
+			$this->state->sequencecheck = $qa->get_sequence_check_count();
 
             $step = $this->find_step($this->state->sequencenumber + 1, $qa, $pendingstep);
             $this->process_next_step($step);
@@ -210,8 +218,8 @@ class qbehaviour_opaque_state {
         $resourcecache = $this->get_resource_cache();
 
         $startreturn = $this->get_connection()->start(
-                $this->state->remoteid, $this->state->remoteversion,
-                $step->get_all_data(), $resourcecache->list_cached_resources(),
+                $this->state->remoteid, $this->state->remoteversion, $this->state->showhintafter, $this->state->showsolutionafter, 
+                $this->state->showsolutionaftertest, $this->state->exammode, $step->get_all_data(), $resourcecache->list_cached_resources(),
                 $options);
 
         $this->extract_stuff_from_response($startreturn, $resourcecache);
@@ -232,10 +240,11 @@ class qbehaviour_opaque_state {
                 $this->state->questionsessionid, self::submitted_data($step));
 
         if (!empty($processreturn->resultstmp) && empty($processreturn->results)) {
-            $this->state->resultstmp = $processreturn->resultstmp;
-        }
+            $this->state->resultstmp = $processreturn->resultstmp;		
+        }  
 
         if (!empty($processreturn->results)) {
+            $this->state->results = $processreturn->results;
             $this->state->resultssequencenumber = $this->state->sequencenumber + 1;
         }
 
@@ -247,6 +256,7 @@ class qbehaviour_opaque_state {
 
         $this->extract_stuff_from_response($processreturn, $resourcecache);
         $this->state->sequencenumber++;
+		
     }
 
     /**
@@ -310,6 +320,7 @@ class qbehaviour_opaque_state {
         if ($seq == $qa->get_num_steps() && !is_null($pendingstep)) {
             return $pendingstep;
         }
+		
         throw new coding_exception('Sequence number ' . $seq . ' out of range.');
     }
 
@@ -331,14 +342,32 @@ class qbehaviour_opaque_state {
         $replaces = $this->get_replaces();
         return str_replace(array_keys($replaces), $replaces, $this->state->xhtml);
     }
+	
+	/**
+     * Get a properly filtered question solfeedback.
+     * @return string the HTML with %% tokens replaced.
+     */
+    public function get_solfeedback() {
+        $replaces = $this->get_replaces();
+        return str_replace(array_keys($replaces), $replaces, $this->state->solfeedback);
+    }
 
     /**
-     * @return object resultstmp the temporary results informationfor correct
+     * Get a properly filtered question correctanstable.
+     * @return string the HTML with %% tokens replaced.
+     */
+    public function get_correctanstable() {
+        $replaces = $this->get_replaces();
+        return str_replace(array_keys($replaces), $replaces, $this->state->correctanstable);
+    }
+
+    /**
+     * @return object resultstmp the temporary results information for correct
      * grading in Moodle, if any have been returned yet.
      */
     public function get_resultstmp() {
         return $this->state->resultstmp;
-    }
+    } 
 
     /**
      * @return object results the results information, if any have been returned yet.
@@ -378,7 +407,8 @@ class qbehaviour_opaque_state {
         if (empty($this->resourcecache)) {
             $this->resourcecache = new qbehaviour_opaque_resource_cache(
                     $this->state->engineid, $this->state->remoteid,
-                    $this->state->remoteversion);
+                    $this->state->remoteversion, $this->state->showhintafter, $this->state->showsolutionafter,
+                    $this->state->showsolutionaftertest, $this->state->exammode);
         }
 
         return $this->resourcecache;
@@ -410,6 +440,10 @@ class qbehaviour_opaque_state {
                 $this->state->engineid == $question->engineid &&
                 $this->state->remoteid == $question->remoteid &&
                 $this->state->remoteversion == $question->remoteversion &&
+                $this->state->showhintafter == $question->showhintafter &&
+                $this->state->showsolutionafter == $question->showsolutionafter &&
+                $this->state->showsolutionaftertest == $question->showsolutionaftertest &&
+                $this->state->exammode == $question->exammode &&
                 $this->state->randomseed == $firststep->get_behaviour_var('_randomseed') &&
                 $this->state->options == $this->make_option_string($options) &&
                 $this->state->sequencenumber <= $targetseq;
@@ -428,6 +462,8 @@ class qbehaviour_opaque_state {
         $response = qbehaviour_opaque_hacks_filter_response($response, $this->state);
 
         $this->state->xhtml = $response->XHTML;
+		$this->state->solfeedback = $response->solfeedback;
+        $this->state->correctanstable = $response->correctanstable;
 
         // Record the session id.
         if (!empty($response->questionSession)) {

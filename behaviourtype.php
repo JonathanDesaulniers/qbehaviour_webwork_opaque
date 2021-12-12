@@ -34,6 +34,10 @@ defined('MOODLE_INTERNAL') || die();
  */
 class qbehaviour_opaque_type extends question_behaviour_type {
     public function can_questions_finish_during_the_attempt() {
-        return true;
+        return false;
     }
+    
+ /*   public function allows_multiple_submitted_responses() {
+        return true;
+    }  */
 }

@@ -28,7 +28,7 @@ $plugin->version   = 2018081400;
 $plugin->requires  = 2017111300;
 $plugin->component = 'qbehaviour_opaque';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'R13-V1.13.1';
+$plugin->release   = 'R13-V1.13.2';
 
 $plugin->dependencies = array(
     'qtype_opaque' => 2018081400,

@@ -1,5 +1,11 @@
 # Change log for the The Opaque question behaviour
 
+## Changes in R13-V1.13.2
+
+* Update to use the show hint, show solution, show solution after test and the exam mode features (see question type opaque change.md)
+* Update to record score with each attempt and to push automatically every answer in answer field after submit is pushed once.
+* Added french canadien to lang file
+
 
 ## Changes in 2.8
 

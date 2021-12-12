@@ -22,18 +22,18 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['errorconnecting'] = "Erreur de connexion à l'engin de questions distant.";
-$string['lCLEAR'] = "Effacer";
-$string['lENTERANSWER'] = "Vérifier";
-$string['lGIVEUP'] = "Abandonner";
-$string['lNEXTQUESTION'] = "Suivant";
-$string['lTRIES'] = "Tentatives";
-$string['lTRY'] = "Tentative";
-$string['lTRYAGAIN'] = "Essayer à nouveau";
-$string['notcomplete'] = "Non complété";
-$string['notcompletedmessage'] = "Vous n'avez pas complété cette question durant la tentative. Aucune relecture n'est possible.";
-$string['pluginname'] = "Question géré par l'engin distant";
-$string['soapfault'] = "Détails techniques:
+$string['errorconnecting'] = 'Error connecting to the remote question engine.';
+$string['lCLEAR'] = 'Clear';
+$string['lENTERANSWER'] = 'Check';
+$string['lGIVEUP'] = 'Pass';
+$string['lNEXTQUESTION'] = 'Next';
+$string['lTRIES'] = 'tries';
+$string['lTRY'] = 'try';
+$string['lTRYAGAIN'] = 'Try again';
+$string['notcomplete'] = 'Not complete';
+$string['notcompletedmessage'] = 'You did not complete this question during the attempt. No review is possible.';
+$string['pluginname'] = 'Question managed by a remote engine';
+$string['soapfault'] = 'Technical details:
 Fault code: {$a->faultcode}
-Fault string: {$a->faultstring}";
-$string['privacy:metadata'] = "Les questions gérées par un engin distant ne sauvegarde aucune donnée personnelle.";
+Fault string: {$a->faultstring}';
+$string['privacy:metadata'] = 'The Question managed by a remote engine plugin does not store any personal data.';

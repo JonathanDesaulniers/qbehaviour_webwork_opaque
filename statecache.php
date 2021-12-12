@@ -211,7 +211,7 @@ class qbehaviour_opaque_state_cache {
         if (!empty($SESSION->qtype_opaque_option_cache)) {
             return $SESSION->qtype_opaque_option_cache;
         } else {
-            return null;
+             return null;
         }
     }
 }

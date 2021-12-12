@@ -136,7 +136,7 @@ class qbehaviour_opaque extends question_behaviour {
         } else {
             $summary = $this->question->summarise_response(qbehaviour_opaque_state::submitted_data($step));
             if ($this->step_has_a_submitted_response($step)) {
-                return get_string('submit', 'question', $summary);
+                return get_string('submitted', 'question', $summary);
             } else {
                 return get_string('saved', 'question', $summary);
             }
@@ -144,7 +144,6 @@ class qbehaviour_opaque extends question_behaviour {
     }
 
     public function process_action(question_attempt_pending_step $pendingstep) {
-
         if ($pendingstep->has_behaviour_var('finish')) {
             return $this->process_finish($pendingstep);
 
@@ -152,7 +151,7 @@ class qbehaviour_opaque extends question_behaviour {
             return $this->process_comment($pendingstep);
 
         } else if ($this->is_same_response($pendingstep) ||
-                $this->qa->get_state()->is_finished()) {
+               $this->qa->get_state()->is_finished()) {
             return question_attempt::DISCARD;
 
         } else {
@@ -184,11 +183,15 @@ class qbehaviour_opaque extends question_behaviour {
 
         if ($opaquestate->get_results_sequence_number() != $this->qa->get_num_steps()) {
             $results = $opaquestate->get_resultstmp();
+            $nbTry =  $results->TRY;
+
             if ($opaquestate->get_progress_info() === 'Answer saved') {
                 $pendingstep->set_state(question_state::$complete);
-            }  else if ($results->TRY > 1) {  // Ensure that using preview at first doesn't complete the attempt
-                $pendingstep->set_state(question_state::$complete);
-            } else {
+                     
+			}  else if ($results->TRY > 1) {  // Ensure that using preview at first doesn't complete the attempt
+                    $pendingstep->set_state(question_state::$complete);
+                     
+            }  else {
                 $pendingstep->set_state(question_state::$todo);
             }
 
@@ -197,7 +200,7 @@ class qbehaviour_opaque extends question_behaviour {
         }  else {
             // Look for a score on the default axis.
             $pendingstep->set_fraction(0);
-             $results = $opaquestate->get_resultstmp();
+            $results = $opaquestate->get_resultstmp();
             foreach ($results->scores as $score) {
                 if ($score->axis == '') {
                     $pendingstep->set_fraction($score->marks / $this->question->defaultmark);
@@ -206,8 +209,8 @@ class qbehaviour_opaque extends question_behaviour {
 
             if ($results->attempts > 0) {
                 $pendingstep->set_state(question_state::$gradedright);
-            } else {
-                $pendingstep->set_state(
+            }  else { 
+			      $pendingstep->set_state(
                         question_state::graded_state_for_fraction($pendingstep->get_fraction()));
             }
 
@@ -232,6 +235,7 @@ class qbehaviour_opaque extends question_behaviour {
         }
 
         return question_attempt::KEEP;
+       
     }
 
     protected function cleanup_results($line) {
