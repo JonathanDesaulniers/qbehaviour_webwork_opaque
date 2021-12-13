@@ -135,6 +135,7 @@ class qbehaviour_opaque_state {
         $this->state->showhintafter = $question->showhintafter;
         $this->state->showsolutionafter = $question->showsolutionafter;
         $this->state->showsolutionaftertest = $question->showsolutionaftertest;
+        $this->state->numattemptlock = $question->numattemptlock;
         $this->state->exammode = $question->exammode;
         $this->state->options       = $this->make_option_string($options);
         $this->state->randomseed    = $firststep->get_behaviour_var('_randomseed');
@@ -219,7 +220,7 @@ class qbehaviour_opaque_state {
 
         $startreturn = $this->get_connection()->start(
                 $this->state->remoteid, $this->state->remoteversion, $this->state->showhintafter, $this->state->showsolutionafter, 
-                $this->state->showsolutionaftertest, $this->state->exammode, $step->get_all_data(), $resourcecache->list_cached_resources(),
+                $this->state->showsolutionaftertest, $this->state->numattemptlock, $this->state->exammode, $step->get_all_data(), $resourcecache->list_cached_resources(),
                 $options);
 
         $this->extract_stuff_from_response($startreturn, $resourcecache);
@@ -408,7 +409,7 @@ class qbehaviour_opaque_state {
             $this->resourcecache = new qbehaviour_opaque_resource_cache(
                     $this->state->engineid, $this->state->remoteid,
                     $this->state->remoteversion, $this->state->showhintafter, $this->state->showsolutionafter,
-                    $this->state->showsolutionaftertest, $this->state->exammode);
+                    $this->state->showsolutionaftertest, $this->state->numattemptlock, $this->state->exammode);
         }
 
         return $this->resourcecache;
@@ -443,6 +444,7 @@ class qbehaviour_opaque_state {
                 $this->state->showhintafter == $question->showhintafter &&
                 $this->state->showsolutionafter == $question->showsolutionafter &&
                 $this->state->showsolutionaftertest == $question->showsolutionaftertest &&
+                $this->state->numattemptlock == $question->numattemptlock &&
                 $this->state->exammode == $question->exammode &&
                 $this->state->randomseed == $firststep->get_behaviour_var('_randomseed') &&
                 $this->state->options == $this->make_option_string($options) &&

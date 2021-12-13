@@ -27,7 +27,7 @@ require_once(dirname(__FILE__) . '/../../../config.php');
 require_once($CFG->dirroot . '/question/behaviour/opaque/resourcecache.php');
 
 $path = get_file_argument();
-list($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $exammode, $filename) = explode('/', trim($path, '/'), 8);
+list($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $numattemptlock, $exammode, $filename) = explode('/', trim($path, '/'), 9);
 
 // The Open University found it necessary to comment out the whole of the following if statement
 // to make things work reliably. However, I think that was only problems with synchronising
@@ -46,10 +46,11 @@ if ($SESSION->cached_opaque_state->engineid != $engineid ||
         $SESSION->cached_opaque_state->showhintafter != $showhintafter) ||
         $SESSION->cached_opaque_state->showsolutionafter != $showsolutionafter ||
         $SESSION->cached_opaque_state->showsolutionaftertest != $showsolutionaftertest ||
+        $SESSION->cached_opaque_state->numattemptlock != $numattemptlock ||
         $SESSION->cached_opaque_state->exammode != $exammode) {
     print_error('cannotaccessfile');
 }
 */
 
-$resourcecache = new qbehaviour_opaque_resource_cache($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $exammode);
+$resourcecache = new qbehaviour_opaque_resource_cache($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $numattemptlock, $exammode);
 $resourcecache->serve_file($filename);

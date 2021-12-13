@@ -56,13 +56,14 @@ class qbehaviour_opaque_resource_cache {
      * @param string $showhintafter, as for showing hint in the question.
      * @param string $showsolutionafter, as for showing solution in the question.
      * @param string $showsolutionaftertest, as for showing solution when test is finished.
+     * @param string $numattemptlock, as for max number of attempt before read only.
      * @param string $exammode, as for showing question in exam mode.
      */
-    public function __construct($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $exammode) {
+    public function __construct($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $numattemptlock, $exammode) {
         global $CFG;
         $folderstart = $CFG->dataroot . '/opaqueresources/' . $engineid . '/' .
         $remoteid . '/' . $remoteversion . '/' . $showhintafter . '/' . $showsolutionafter . '/' . 
-        $showsolutionaftertest  . '/' . $exammode;
+        $showsolutionaftertest  . '/' . $numattemptlock . '/' . $exammode;
         $this->folder = $folderstart . '/files';
         if (!is_dir($this->folder)) {
             $this->mkdir_recursive($this->folder);
@@ -71,7 +72,7 @@ class qbehaviour_opaque_resource_cache {
         if (!is_dir($this->metadatafolder)) {
             $this->mkdir_recursive($this->metadatafolder);
         }
-        $this->baseurl = "/question/behaviour/opaque/file.php/{$engineid}/{$remoteid}/{$remoteversion}/{$showhintafter}/{$showsolutionafter}/{$showsolutionaftertest}/{$exammode}/";
+        $this->baseurl = "/question/behaviour/opaque/file.php/{$engineid}/{$remoteid}/{$remoteversion}/{$showhintafter}/{$showsolutionafter}/{$showsolutionaftertest}/{$numattemptlock}/{$exammode}/";
     }
 
     /**
