@@ -50,7 +50,7 @@ class qbehaviour_opaque_renderer extends qbehaviour_renderer {
         $question = $qa->get_question();
         $resourcecache = new qbehaviour_opaque_resource_cache($question->engineid,
                 $question->remoteid, $question->remoteversion, $question->showhintafter, $question->showsolutionafter, 
-                $question->showsolutionaftertest, $question->numattemptlock, $question->exammode);
+                $question->showsolutionaftertest, $question->numattemptlock, $question->exammode); 
 
         $javascript = '';
         if ($opaquestate->get_css_filename() &&

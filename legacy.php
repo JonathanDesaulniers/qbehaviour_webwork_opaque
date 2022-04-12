@@ -49,7 +49,7 @@ function qbehaviour_opaque_hacks_filter_xhtml($xhtml, $opaquestate) {
         $xhtml = preg_replace(
                 '|<input(?:(?!disabled=)[^>])*? id="[^"]*%%omact_[^"]*"(?:(?!disabled=)[^>])*?>' .
                 '<script type="text/javascript">[^<]*</script>|', '', $xhtml);
-    }
+    } 
 
     // Process the links to TinyMCE that OpenMark now requires.
     if (strpos($xhtml, '%%TINYMCE%%') !== false) {

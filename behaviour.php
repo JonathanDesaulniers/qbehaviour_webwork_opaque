@@ -183,13 +183,17 @@ class qbehaviour_opaque extends question_behaviour {
 
         if ($opaquestate->get_results_sequence_number() != $this->qa->get_num_steps()) {
             $results = $opaquestate->get_resultstmp();
-            $nbTry =  $results->TRY;
+			if(!empty($results->TRY)){
+				$nbTry =  $results->TRY;
+			}
 
             if ($opaquestate->get_progress_info() === 'Answer saved') {
                 $pendingstep->set_state(question_state::$complete);
                      
-			}  else if ($results->TRY > 1) {  // Ensure that using preview at first doesn't complete the attempt
-                    $pendingstep->set_state(question_state::$complete);
+			}  else if(!empty($results->TRY)){
+				    if($results->TRY > 1){  // Ensure that using preview at first doesn't complete the attempt
+						$pendingstep->set_state(question_state::$complete);
+					}
                      
             }  else {
                 $pendingstep->set_state(question_state::$todo);
@@ -201,18 +205,22 @@ class qbehaviour_opaque extends question_behaviour {
             // Look for a score on the default axis.
             $pendingstep->set_fraction(0);
             $results = $opaquestate->get_resultstmp();
-            foreach ($results->scores as $score) {
-                if ($score->axis == '') {
-                    $pendingstep->set_fraction($score->marks / $this->question->defaultmark);
-                }
-            }
+			if(!empty($results->scores)){
+				foreach ($results->scores as $score) {
+					if ($score->axis == '') {
+						$pendingstep->set_fraction($score->marks / $this->question->defaultmark);
+					}
+				}
+			}
 
-            if ($results->attempts > 0) {
-                $pendingstep->set_state(question_state::$gradedright);
-            }  else { 
-			      $pendingstep->set_state(
-                        question_state::graded_state_for_fraction($pendingstep->get_fraction()));
-            }
+            if(!empty($results->attempts)){
+				if ($results->attempts > 0) {
+					$pendingstep->set_state(question_state::$gradedright);
+				}  else { 
+					$pendingstep->set_state(
+							question_state::graded_state_for_fraction($pendingstep->get_fraction()));
+				}
+			}
 
             if (!empty($results->questionLine)) {
                 $this->qa->set_question_summary(

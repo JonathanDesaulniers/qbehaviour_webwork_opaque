@@ -153,8 +153,9 @@ class qbehaviour_opaque_state {
         $this->state->resultstmp            = null;        
         $this->state->cssfilename           = null;
         $this->state->progressinfo          = null;
-		$this->state->solfeedback           = null;
-        $this->state->correctanstable        = null;
+	$this->state->solfeedback           = null;
+        $this->state->correctanstable       = null;
+	$this->state->correctanstable1      = null;
 
         // Having reloaded the engine definition, we need to re-connect.
         $this->connection = null;
@@ -349,8 +350,11 @@ class qbehaviour_opaque_state {
      * @return string the HTML with %% tokens replaced.
      */
     public function get_solfeedback() {
-        $replaces = $this->get_replaces();
-        return str_replace(array_keys($replaces), $replaces, $this->state->solfeedback);
+        if (!empty($this->state->solfeedback)){
+        	$replaces = $this->get_replaces();
+        	return str_replace(array_keys($replaces), $replaces, $this->state->solfeedback);
+	}
+	return '';
     }
 
     /**
@@ -358,8 +362,23 @@ class qbehaviour_opaque_state {
      * @return string the HTML with %% tokens replaced.
      */
     public function get_correctanstable() {
-        $replaces = $this->get_replaces();
-        return str_replace(array_keys($replaces), $replaces, $this->state->correctanstable);
+	if (!empty($this->state->correctanstable)){
+        	$replaces = $this->get_replaces();
+        	return str_replace(array_keys($replaces), $replaces, $this->state->correctanstable);
+	}
+	return '';
+    }
+	
+	/**
+     * Get a properly filtered question correctanstable1.
+     * @return string the HTML with %% tokens replaced.
+     */
+    public function get_correctanstable1() {
+	if (!empty($this->state->correctanstable1)){
+        	$replaces = $this->get_replaces();
+        	return str_replace(array_keys($replaces), $replaces, $this->state->correctanstable1);
+	}
+	return '';
     }
 
     /**
@@ -464,8 +483,15 @@ class qbehaviour_opaque_state {
         $response = qbehaviour_opaque_hacks_filter_response($response, $this->state);
 
         $this->state->xhtml = $response->XHTML;
-		$this->state->solfeedback = $response->solfeedback;
-        $this->state->correctanstable = $response->correctanstable;
+		if(!empty($response->solfeedback)){
+			$this->state->solfeedback = $response->solfeedback;
+		}
+		if(!empty($response->correctanstable)){
+			$this->state->correctanstable = $response->correctanstable;
+		}
+		if(!empty($response->correctanstable1)){
+        $this->state->correctanstable1 = $response->correctanstable1;
+		}
 
         // Record the session id.
         if (!empty($response->questionSession)) {

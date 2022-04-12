@@ -33,5 +33,7 @@ $string['lTRYAGAIN'] = "Essayer à nouveau";
 $string['notcomplete'] = "Non complété";
 $string['notcompletedmessage'] = "Vous n'avez pas complété cette question durant la tentative. Aucune relecture n'est possible.";
 $string['pluginname'] = "Question géré par l'engin distant";
-$string['soapfault'] = 'Détails techniques:<br>Fault code: $a->faultcode<br>Fault string: $a->faultstring';
+$string['soapfault'] = 'Technical details:
+Fault code: {$a->faultcode}
+ Fault string: {$a->faultstring}';
 $string['privacy:metadata'] = "Les questions gérées par un engin distant ne sauvegarde aucune donnée personnelle.";
