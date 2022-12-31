@@ -17,19 +17,25 @@
 /**
  * This file contains tests for the Opaque behaviour.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2010 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace qbehaviour_opaque;
 
 defined('MOODLE_INTERNAL') || die();
+
+use question_pattern_expectation;
+use question_no_pattern_expectation;
+use question_state;
+use test_question_maker;
 
 global $CFG;
 require_once($CFG->dirroot . '/question/engine/lib.php');
 require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
-require_once($CFG->dirroot . '/question/behaviour/opaque/behaviour.php');
-require_once($CFG->dirroot . '/question/type/opaque/tests/test_engine_configuration.php');
+require_once($CFG->dirroot . '/question/behaviour/webwork_opaque/behaviour.php');
+require_once($CFG->dirroot . '/question/type/webwork_opaque/tests/test_engine_configuration.php');
 
 
 /**
@@ -37,22 +43,22 @@ require_once($CFG->dirroot . '/question/type/opaque/tests/test_engine_configurat
  *
  * @copyright 2010 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @group qbehaviour_opaque
+ * @group qbehaviour_webwork_opaque
  */
-class qbehaviour_opaque_test extends qbehaviour_walkthrough_test_base {
+class opaquebehaviour_test extends \qbehaviour_walkthrough_test_base {
     public function setUp() {
         parent::setUp();
-        if (!qtype_opaque_test_config::is_test_config_available()) {
+        if (!qtype_webwork_opaque_test_config::is_test_config_available()) {
             $this->markTestSkipped(
-                    'To run this Opaque unit test, you must set up a test engine ' .
+                    'To run this webwork_opaque unit test, you must set up a test engine ' .
                     'configuration in your config.php file.');
         }
     }
 
     public function test_wrong_three_times() {
-        $q = test_question_maker::make_question('opaque', 'mu120_m5_q01');
+        $q = test_question_maker::make_question('webwork_opaque', 'mu120_m5_q01');
         if (is_null($q)) {
-            $this->markTestSkipped('Cannot test Opaque. No question engines configured.');
+            $this->markTestSkipped('Cannot test webwork_opaque. No question engines configured.');
         }
         $this->start_attempt_at_question($q, 'interactive');
         $qa = $this->quba->get_question_attempt($this->slot);
@@ -80,7 +86,7 @@ class qbehaviour_opaque_test extends qbehaviour_walkthrough_test_base {
                 new question_pattern_expectation('/Below is a plan of a proposed garden/'),
                 new question_pattern_expectation('/incorrect/'),
                 new question_pattern_expectation('/' .
-                        preg_quote(get_string('notcomplete', 'qbehaviour_opaque'), '/') . '/'),
+                        preg_quote(get_string('notcomplete', 'qbehaviour_webwork_opaque'), '/') . '/'),
                 $this->get_contains_button_expectation(
                         $qa->get_qt_field_name('omact_ok'), 'Try again'));
 
@@ -104,7 +110,7 @@ class qbehaviour_opaque_test extends qbehaviour_walkthrough_test_base {
                 new question_pattern_expectation('/Below is a plan of a proposed garden/'),
                 new question_pattern_expectation('/still incorrect/'),
                 new question_pattern_expectation('/' .
-                        preg_quote(get_string('notcomplete', 'qbehaviour_opaque'), '/') . '/'));
+                        preg_quote(get_string('notcomplete', 'qbehaviour_webwork_opaque'), '/') . '/'));
 
         // Try again.
         $this->process_submission(array('omact_ok' => 'Try again'));
@@ -144,14 +150,14 @@ class qbehaviour_opaque_test extends qbehaviour_walkthrough_test_base {
     }
 
     public function test_right_first_time() {
-        $q = test_question_maker::make_question('opaque', 'mu120_m5_q01');
+        $q = test_question_maker::make_question('webwork_opaque', 'mu120_m5_q01');
         if (is_null($q)) {
-            $this->markTestSkipped('Cannot test Opaque. No question engines configured.');
+            $this->markTestSkipped('Cannot test webwork_opaque. No question engines configured.');
         }
         $this->start_attempt_at_question($q, 'interactive');
         $qa = $this->quba->get_question_attempt($this->slot);
 
-        // Work out right answer (yuck!)
+        // Work out right answer (yuck!).
         $html = $this->quba->render_question($this->slot, $this->displayoptions);
         preg_match('/(0\.5|2\.0|3\.0) metres/', $html, $matches);
         $scale = $matches[1];
@@ -189,14 +195,14 @@ class qbehaviour_opaque_test extends qbehaviour_walkthrough_test_base {
     }
 
     public function test_different_max() {
-        $q = test_question_maker::make_question('opaque', 'mu120_m5_q01');
+        $q = test_question_maker::make_question('webwork_opaque', 'mu120_m5_q01');
         if (is_null($q)) {
-            $this->markTestSkipped('Cannot test Opaque. No question engines configured.');
+            $this->markTestSkipped('Cannot test webwork_opaque. No question engines configured.');
         }
         $this->start_attempt_at_question($q, 'interactive', 6.0);
         $qa = $this->quba->get_question_attempt($this->slot);
 
-        // Work out right answer (yuck!)
+        // Work out right answer (yuck!).
         $html = $this->quba->render_question($this->slot, $this->displayoptions);
         preg_match('/(0\.5|2\.0|3\.0) metres/', $html, $matches);
         $scale = $matches[1];
@@ -233,9 +239,9 @@ class qbehaviour_opaque_test extends qbehaviour_walkthrough_test_base {
     }
 
     public function test_gave_up() {
-        $q = test_question_maker::make_question('opaque', 'mu120_m5_q01');
+        $q = test_question_maker::make_question('webwork_opaque', 'mu120_m5_q01');
         if (is_null($q)) {
-            $this->markTestSkipped('Cannot test Opaque. No question engines configured.');
+            $this->markTestSkipped('Cannot test webwork_opaque. No question engines configured.');
         }
         $this->start_attempt_at_question($q, 'interactive');
 
@@ -245,6 +251,6 @@ class qbehaviour_opaque_test extends qbehaviour_walkthrough_test_base {
         $this->check_current_mark(null);
         $this->check_current_output(
                 new question_pattern_expectation('/' .
-                        preg_quote(get_string('notcompletedmessage', 'qbehaviour_opaque'), '/') . '/'));
+                        preg_quote(get_string('notcompletedmessage', 'qbehaviour_webwork_opaque'), '/') . '/'));
     }
 }

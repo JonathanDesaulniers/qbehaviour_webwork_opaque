@@ -17,14 +17,14 @@
 /**
  * Serves files from the Opaque resource cache.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2007 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
 require_once(dirname(__FILE__) . '/../../../config.php');
-require_once($CFG->dirroot . '/question/behaviour/opaque/resourcecache.php');
+require_once($CFG->dirroot . '/question/behaviour/webwork_opaque/resourcecache.php');
 
 $path = get_file_argument();
 list($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $numattemptlock, $exammode, $filename) = explode('/', trim($path, '/'), 9);
@@ -32,7 +32,7 @@ list($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $
 // The Open University found it necessary to comment out the whole of the following if statement
 // to make things work reliably. However, I think that was only problems with synchronising
 // the session between our load-balanced servers, and I think it is better to leave
-// this code in. (OU bug 7991.)
+// this code in (OU bug 7991.).
 
 // Actually, this seems to be unrelated to load-balancers, and it is happening
 // again. There is some horrible race-condition here that I can't work out, so
@@ -40,17 +40,17 @@ list($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $
 
 /*
 global $SESSION;
-if ($SESSION->cached_opaque_state->engineid != $engineid ||
-        $SESSION->cached_opaque_state->remoteid != $remoteid ||
-        $SESSION->cached_opaque_state->remoteversion != $remoteversion) ||
-        $SESSION->cached_opaque_state->showhintafter != $showhintafter) ||
-        $SESSION->cached_opaque_state->showsolutionafter != $showsolutionafter ||
-        $SESSION->cached_opaque_state->showsolutionaftertest != $showsolutionaftertest ||
-        $SESSION->cached_opaque_state->numattemptlock != $numattemptlock ||
-        $SESSION->cached_opaque_state->exammode != $exammode) {
+if ($SESSION->cached_webwork_opaque_state->engineid != $engineid ||
+        $SESSION->cached_webwork_opaque_state->remoteid != $remoteid ||
+        $SESSION->cached_webwork_opaque_state->remoteversion != $remoteversion) ||
+        $SESSION->cached_webwork_opaque_state->showhintafter != $showhintafter) ||
+        $SESSION->cached_webwork_opaque_state->showsolutionafter != $showsolutionafter ||
+        $SESSION->cached_webwork_opaque_state->showsolutionaftertest != $showsolutionaftertest ||
+        $SESSION->cached_webwork_opaque_state->numattemptlock != $numattemptlock ||
+        $SESSION->cached_webwork_opaque_state->exammode != $exammode) {
     print_error('cannotaccessfile');
 }
 */
 
-$resourcecache = new qbehaviour_opaque_resource_cache($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $numattemptlock, $exammode);
+$resourcecache = new qbehaviour_webwork_opaque_resource_cache($engineid, $remoteid, $remoteversion, $showhintafter, $showsolutionafter, $showsolutionaftertest, $numattemptlock, $exammode);
 $resourcecache->serve_file($filename);

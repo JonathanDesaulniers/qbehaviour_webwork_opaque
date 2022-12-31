@@ -15,15 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the qbehaviour_opaque_state_cache class.
+ * Defines the qbehaviour_webwork_opaque_state_cache class.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2011 Antti Andreimann
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
 
 /**
  * Caches opaque states in the session.
@@ -35,13 +32,13 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2011 Antti Andreimann
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qbehaviour_opaque_state_cache {
+class qbehaviour_webwork_opaque_state_cache {
     const MAX_IDLE_LIFETIME = 2;
 
     /** @var array reference to where the data is acutally stored in the session. */
     protected $cache;
 
-    /** @var qbehaviour_opaque_cache_manager singleton instance. */
+    /** @var qbehaviour_webwork_opaque_cache_manager singleton instance. */
     protected static $instance = null;
 
     /**
@@ -50,12 +47,12 @@ class qbehaviour_opaque_state_cache {
     protected function __construct() {
         global $SESSION;
 
-        if (!isset($SESSION->qtype_opaque_state_cache) ||
-                !is_array($SESSION->qtype_opaque_state_cache)) {
-            $SESSION->qtype_opaque_state_cache = array();
+        if (!isset($SESSION->qtype_webwork_opaque_state_cache) ||
+                !is_array($SESSION->qtype_webwork_opaque_state_cache)) {
+            $SESSION->qtype_webwork_opaque_state_cache = array();
         }
 
-        $this->cache = &$SESSION->qtype_opaque_state_cache;
+        $this->cache = &$SESSION->qtype_webwork_opaque_state_cache;
 
         $this->age_all_entries();
 
@@ -140,7 +137,7 @@ class qbehaviour_opaque_state_cache {
         // Try to stop any active question session.
         if (!empty($state->questionsessionid) && !empty($state->engine)) {
             try {
-                $connection = new qbehaviour_opaque_connection($state->engine);
+                $connection = new qbehaviour_webwork_opaque_connection($state->engine);
                 $connection->stop($state->questionsessionid);
                 $state->questionsessionid = null;
             } catch (SoapFault $e) { // @codingStandardsIgnoreLine
@@ -192,15 +189,15 @@ class qbehaviour_opaque_state_cache {
         if (is_null($options)) {
             return;
         }
-        if (!isset($SESSION->qtype_opaque_option_cache)) {
-            $SESSION->qtype_opaque_option_cache = new stdClass();
+        if (!isset($SESSION->qtype_webwork_opaque_option_cache)) {
+            $SESSION->qtype_webwork_opaque_option_cache = new stdClass();
         }
-        $SESSION->qtype_opaque_option_cache->readonly = $options->readonly;
-        $SESSION->qtype_opaque_option_cache->marks = $options->marks;
-        $SESSION->qtype_opaque_option_cache->markdp = $options->markdp;
-        $SESSION->qtype_opaque_option_cache->correctness = $options->correctness;
-        $SESSION->qtype_opaque_option_cache->feedback = $options->feedback;
-        $SESSION->qtype_opaque_option_cache->generalfeedback = $options->generalfeedback;
+        $SESSION->qtype_webwork_opaque_option_cache->readonly = $options->readonly;
+        $SESSION->qtype_webwork_opaque_option_cache->marks = $options->marks;
+        $SESSION->qtype_webwork_opaque_option_cache->markdp = $options->markdp;
+        $SESSION->qtype_webwork_opaque_option_cache->correctness = $options->correctness;
+        $SESSION->qtype_webwork_opaque_option_cache->feedback = $options->feedback;
+        $SESSION->qtype_webwork_opaque_option_cache->generalfeedback = $options->generalfeedback;
     }
 
     /**
@@ -208,8 +205,8 @@ class qbehaviour_opaque_state_cache {
      */
     public function get_last_used_options() {
         global $SESSION;
-        if (!empty($SESSION->qtype_opaque_option_cache)) {
-            return $SESSION->qtype_opaque_option_cache;
+        if (!empty($SESSION->qtype_webwork_opaque_option_cache)) {
+            return $SESSION->qtype_webwork_opaque_option_cache;
         } else {
              return null;
         }

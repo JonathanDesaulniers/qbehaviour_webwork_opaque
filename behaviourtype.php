@@ -15,24 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Question behaviour type specifically for use with the Opaque question type.
+ * Question behaviour type specifically for use with the webwork_opaque question type.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2014 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
-defined('MOODLE_INTERNAL') || die();
-
-
 /**
- * Question behaviour type information specifically for use with the Opaque question type.
+ * Question behaviour type information specifically for use with the webwork_opaque question type.
  *
  * @copyright 2014 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qbehaviour_opaque_type extends question_behaviour_type {
+class qbehaviour_webwork_opaque_type extends question_behaviour_type {
     public function can_questions_finish_during_the_attempt() {
         return true;
     }

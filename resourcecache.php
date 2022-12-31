@@ -15,16 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the qbehaviour_opaque_resource_cache class.
+ * Defines the qbehaviour_webwork_opaque_resource_cache class.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2006 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
-defined('MOODLE_INTERNAL') || die();
-
 
 /**
  * This class caches the resources belonging a particular question.
@@ -35,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2010 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qbehaviour_opaque_resource_cache {
+class qbehaviour_webwork_opaque_resource_cache {
     /** Prefix used for CSS files. */
     const CSS_PREFIX = '__styles_';
 
@@ -49,7 +45,7 @@ class qbehaviour_opaque_resource_cache {
     protected $baseurl;
 
     /**
-     * Create a new qbehaviour_opaque_resource_cache for a particular remote question.
+     * Create a new qbehaviour_webwork_opaque_resource_cache for a particular remote question.
      * @param int $engineid the id of the question engine.
      * @param string $remoteid remote question id, as per Opaque spec.
      * @param string $remoteversion remote question version, as per Opaque spec.
@@ -72,7 +68,7 @@ class qbehaviour_opaque_resource_cache {
         if (!is_dir($this->metadatafolder)) {
             $this->mkdir_recursive($this->metadatafolder);
         }
-        $this->baseurl = "/question/behaviour/opaque/file.php/{$engineid}/{$remoteid}/{$remoteversion}/{$showhintafter}/{$showsolutionafter}/{$showsolutionaftertest}/{$numattemptlock}/{$exammode}/";
+        $this->baseurl = "/question/behaviour/webwork_opaque/file.php/{$engineid}/{$remoteid}/{$remoteversion}/{$showhintafter}/{$showsolutionafter}/{$showsolutionaftertest}/{$numattemptlock}/{$exammode}/";
     }
 
     /**

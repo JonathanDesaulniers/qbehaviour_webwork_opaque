@@ -17,14 +17,10 @@
 /**
  * Defines the renderer for the Opaque behaviour.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2010 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
-defined('MOODLE_INTERNAL') || die();
-
 
 /**
  * Renderer for outputting parts of a question when the actual behaviour
@@ -33,22 +29,22 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2010 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qbehaviour_opaque_renderer extends qbehaviour_renderer {
+class qbehaviour_webwork_opaque_renderer extends qbehaviour_renderer {
 
     public function controls(question_attempt $qa, question_display_options $options) {
         if ($qa->get_state()->is_gave_up()) {
-            return html_writer::tag('div', get_string('notcompletedmessage', 'qbehaviour_opaque'),
+            return html_writer::tag('div', get_string('notcompletedmessage', 'qbehaviour_webwork_opaque'),
                     array('class' => 'question_aborted'));
         }
 
         try {
-            $opaquestate = new qbehaviour_opaque_state($qa, null, $options);
+            $opaquestate = new qbehaviour_webwork_opaque_state($qa, null, $options);
         } catch (SoapFault $sf) {
             return $this->soap_fault($sf);
         }
 
         $question = $qa->get_question();
-        $resourcecache = new qbehaviour_opaque_resource_cache($question->engineid,
+        $resourcecache = new qbehaviour_webwork_opaque_resource_cache($question->engineid,
                 $question->remoteid, $question->remoteversion, $question->showhintafter, $question->showsolutionafter, 
                 $question->showsolutionaftertest, $question->numattemptlock, $question->exammode); 
 
@@ -66,15 +62,15 @@ class qbehaviour_opaque_renderer extends qbehaviour_renderer {
         }
 
         return html_writer::tag('div', $javascript . $opaquestate->get_xhtml(),
-                array('class' => qbehaviour_opaque_legacy_browser_type()));
+                array('class' => qbehaviour_webwork_opaque_legacy_browser_type()));
     }
 
     protected function soap_fault(SoapFault $sf) {
         $a = new stdClass();
         $a->faultcode = $sf->faultcode;
         $a->faultstring = $sf->getMessage();
-        return html_writer::tag('div', get_string('errorconnecting', 'qbehaviour_opaque') .
-                html_writer::tag('pre', get_string('soapfault', 'qbehaviour_opaque', $a),
+        return html_writer::tag('div', get_string('errorconnecting', 'qbehaviour_webwork_opaque') .
+                html_writer::tag('pre', get_string('soapfault', 'qbehaviour_webwork_opaque', $a),
                         array('class' => 'notifytiny')),
                 array('class' => 'opaqueerror'));
     }

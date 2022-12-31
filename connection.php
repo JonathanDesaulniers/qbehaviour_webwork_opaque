@@ -15,19 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the qbehaviour_opaque_connection class.
+ * Defines the qbehaviour_webwork_opaque_connection class.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2011 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
-defined('MOODLE_INTERNAL') || die();
-
-
 // In config.php, you can set
-// $CFG->qtype_opaque_soap_class = 'qtype_opaque_soap_client_with_logging';
+// $CFG->qtype_webwork_opaque_soap_class = 'qtype_webwork_opaque_soap_client_with_logging';
 // To log every SOAP call in huge detail. Lots are writted to moodledata/temp.
 
 /**
@@ -37,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2011 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qbehaviour_opaque_connection extends qtype_opaque_connection {
+class qbehaviour_webwork_opaque_connection extends qtype_webwork_opaque_connection {
 
     /**
      * @param string $secret the secret string for this question engine.

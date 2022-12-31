@@ -14,16 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * Privacy Subsystem implementation for qbehaviour_opaque.
+ * Privacy Subsystem implementation for qbehaviour_webwork_opaque.
  *
- * @package    qbehaviour_opaque
+ * @package    qbehaviour_webwork_opaque
  * @copyright  2018 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace qbehaviour_opaque\privacy;
-defined('MOODLE_INTERNAL') || die();
+namespace qbehaviour_webwork_opaque\privacy;
+
 /**
- * Privacy Subsystem for qbehaviour_opaque implementing null_provider.
+ * Privacy Subsystem for qbehaviour_webwork_opaque implementing null_provider.
  *
  * @copyright  2018 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

@@ -17,7 +17,7 @@
 /**
  * Hack to display TinyMCE the way OpenMark wants.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2012 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -66,12 +66,12 @@ if (!$zoom) {
 }
 
 ?>
-tinymce.PluginManager.load('supsub', '<?php echo $CFG->wwwroot; ?>/question/behaviour/opaque/tinymce_supsub_plugin.js');
+tinymce.PluginManager.load('supsub', '<?php echo $CFG->wwwroot; ?>/question/behaviour/webwork_opaque/tinymce_supsub_plugin.js');
 
 tinyMCE.init({
     // General options
     apply_source_formatting: true,
-    content_css: "<?php echo $CFG->wwwroot; ?>/question/behaviour/opaque/tinymce<?php echo $zoom; ?>.css",
+    content_css: "<?php echo $CFG->wwwroot; ?>/question/behaviour/webwork_opaque/tinymce<?php echo $zoom; ?>.css",
     directionality: "ltr",
     document_base_url: "<?php echo $CFG->wwwroot . '/'; ?>",
     editor_selector: "<?php echo $editorselector; ?>",

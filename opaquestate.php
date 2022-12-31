@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the qbehaviour_opaque_state class.
+ * Defines the qbehaviour_webwork_opaque_state class.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2006 The Open University, 2011 Antti Andreimann
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/question/type/opaque/enginemanager.php');
+require_once($CFG->dirroot . '/question/type/webwork_opaque/enginemanager.php');
 
 
 /**
@@ -34,7 +34,7 @@ require_once($CFG->dirroot . '/question/type/opaque/enginemanager.php');
  * @copyright 2011 Antti Andreimann based on code from The Open University.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qbehaviour_opaque_state {
+class qbehaviour_webwork_opaque_state {
 
     /**
      * @var object The actual data about the state. We use a stdClass because
@@ -43,13 +43,13 @@ class qbehaviour_opaque_state {
      */
     protected $state;
 
-    /** @var qbehaviour_opaque_resource_cache */
+    /** @var qbehaviour_webwork_opaque_resource_cache */
     protected $resourcecache;
 
-    /** @var qbehaviour_opaque_cache_manager */
+    /** @var qbehaviour_webwork_opaque_cache_manager */
     protected $statecache;
 
-    /** @var qbehaviour_opaque_connection */
+    /** @var qbehaviour_webwork_opaque_connection */
     protected $connection;
 
     /** @var array tokens that should be replaced in the HTML. */
@@ -80,7 +80,7 @@ class qbehaviour_opaque_state {
             $targetseq += 1;
         }
 
-        $this->statecache = qbehaviour_opaque_state_cache::get();
+        $this->statecache = qbehaviour_webwork_opaque_state_cache::get();
         $this->state = $this->statecache->load(
                 $this->calculate_cache_key($qa->get_question()->id, $firststep));
 
@@ -140,7 +140,7 @@ class qbehaviour_opaque_state {
         $this->state->options       = $this->make_option_string($options);
         $this->state->randomseed    = $firststep->get_behaviour_var('_randomseed');
         $this->state->nameprefix    = $qa->get_field_prefix();
-        $this->state->engine        = qtype_opaque_engine_manager::get()->load($question->engineid);
+        $this->state->engine        = qtype_webwork_opaque_engine_manager::get()->load($question->engineid);
 
         // Set up the fields where we will store data sent back by the remote engine.
         // Added resultstmp for correct grading in Moodle
@@ -332,8 +332,15 @@ class qbehaviour_opaque_state {
      * @return array the response data.
      */
     public static function submitted_data(question_attempt_step $step) {
-        $response = $step->get_submitted_data();
-        return qbehaviour_opaque_fix_up_submitted_data($response, $step);
+        if (is_array($step->get_submitted_data())) {
+            $response = $step->get_submitted_data();
+            return qbehaviour_webwork_opaque_fix_up_submitted_data($response, $step);
+        }
+
+        else {
+            $response = array($step->get_submitted_data());
+            return qbehaviour_webwork_opaque_fix_up_submitted_data($response, $step);
+        }
     }
 
     /**
@@ -421,11 +428,11 @@ class qbehaviour_opaque_state {
     /**
      * Get resource cache associated with the current opaque state
      *
-     * @return qbehaviour_opaque_resource_cache
+     * @return qbehaviour_webwork_opaque_resource_cache
      */
     protected function get_resource_cache() {
         if (empty($this->resourcecache)) {
-            $this->resourcecache = new qbehaviour_opaque_resource_cache(
+            $this->resourcecache = new qbehaviour_webwork_opaque_resource_cache(
                     $this->state->engineid, $this->state->remoteid,
                     $this->state->remoteversion, $this->state->showhintafter, $this->state->showsolutionafter,
                     $this->state->showsolutionaftertest, $this->state->numattemptlock, $this->state->exammode);
@@ -437,11 +444,11 @@ class qbehaviour_opaque_state {
     /**
      * Get connection to the correct question engine
      *
-     * @return qbehaviour_opaque_connection the connection
+     * @return qbehaviour_webwork_opaque_connection the connection
      */
     protected function get_connection() {
         if (empty($this->connection)) {
-            $this->connection = new qbehaviour_opaque_connection($this->state->engine);
+            $this->connection = new qbehaviour_webwork_opaque_connection($this->state->engine);
         }
 
         return $this->connection;
@@ -477,10 +484,10 @@ class qbehaviour_opaque_state {
      * @param object $resourcecache the resource cache for this question.
      */
     protected function extract_stuff_from_response($response,
-            qbehaviour_opaque_resource_cache $resourcecache) {
+            qbehaviour_webwork_opaque_resource_cache $resourcecache) {
 
         // Apply OpenMark hacks.
-        $response = qbehaviour_opaque_hacks_filter_response($response, $this->state);
+        $response = qbehaviour_webwork_opaque_hacks_filter_response($response, $this->state);
 
         $this->state->xhtml = $response->XHTML;
 		if(!empty($response->solfeedback)){
@@ -543,7 +550,7 @@ class qbehaviour_opaque_state {
         $strings = array('lTRYAGAIN', 'lGIVEUP', 'lNEXTQUESTION', 'lENTERANSWER',
                 'lCLEAR', 'lTRY', 'lTRIES');
         foreach ($strings as $string) {
-            $this->replaces["%%$string%%"] = get_string($string, 'qbehaviour_opaque');
+            $this->replaces["%%$string%%"] = get_string($string, 'qbehaviour_webwork_opaque');
         }
 
         return $this->replaces;

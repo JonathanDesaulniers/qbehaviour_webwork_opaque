@@ -17,7 +17,7 @@
 /**
  * This behaviour specifically for use with the Opaque question type.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2010 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,21 +25,21 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/question/type/opaque/connection.php');
-require_once($CFG->dirroot . '/question/behaviour/opaque/connection.php');
-require_once($CFG->dirroot . '/question/behaviour/opaque/statecache.php');
-require_once($CFG->dirroot . '/question/behaviour/opaque/resourcecache.php');
-require_once($CFG->dirroot . '/question/behaviour/opaque/legacy.php');
-require_once($CFG->dirroot . '/question/behaviour/opaque/opaquestate.php');
+require_once($CFG->dirroot . '/question/type/webwork_opaque/connection.php');
+require_once($CFG->dirroot . '/question/behaviour/webwork_opaque/connection.php');
+require_once($CFG->dirroot . '/question/behaviour/webwork_opaque/statecache.php');
+require_once($CFG->dirroot . '/question/behaviour/webwork_opaque/resourcecache.php');
+require_once($CFG->dirroot . '/question/behaviour/webwork_opaque/legacy.php');
+require_once($CFG->dirroot . '/question/behaviour/webwork_opaque/opaquestate.php');
 
 
 /**
- * This behaviour is specifically for use with the Opaque question type.
+ * This behaviour is specifically for use with the webwork_opaque question type.
  *
  * @copyright 2010 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qbehaviour_opaque extends question_behaviour {
+class qbehaviour_webwork_opaque extends question_behaviour {
     /** @var string */
     protected $preferredbehaviour;
     /** @var string */
@@ -51,7 +51,7 @@ class qbehaviour_opaque extends question_behaviour {
     }
 
     public function is_compatible_question(question_definition $question) {
-        return $question instanceof qtype_opaque_question;
+        return $question instanceof qtype_webwork_opaque_question;
     }
 
     public function get_state_string($showcorrectness) {
@@ -65,7 +65,7 @@ class qbehaviour_opaque extends question_behaviour {
             return $omstate;
 
         } else {
-            return get_string('notcomplete', 'qbehaviour_opaque');
+            return get_string('notcomplete', 'qbehaviour_webwork_opaque');
         }
     }
 
@@ -77,13 +77,13 @@ class qbehaviour_opaque extends question_behaviour {
         // We no longer set the random seed as such (we pass a fixed conventional
         // value instead). Instead we pass the variant as OpenMark's 'attempt'
         // paramter.
-        $step->set_behaviour_var('_randomseed', 123456789);
+        $step->set_behaviour_var('_randomseed', rand(0, 999999999));
         $step->set_behaviour_var('_attempt', $variant);
         $step->set_behaviour_var('_userid', $USER->id);
         $step->set_behaviour_var('_language', current_language());
         $step->set_behaviour_var('_preferredbehaviour', $this->preferredbehaviour);
 
-        $opaquestate = new qbehaviour_opaque_state($this->qa, $step);
+        $opaquestate = new qbehaviour_webwork_opaque_state($this->qa, $step);
         $step->set_behaviour_var('_statestring', $opaquestate->get_progress_info());
 
         // Remember the question summary.
@@ -103,20 +103,20 @@ class qbehaviour_opaque extends question_behaviour {
         return $this->questionsummary;
     }
 
-    protected function is_same_response(question_attempt_step $pendingstep) {
+    /*protected function is_same_response(question_attempt_step $pendingstep) {
         $newdata = $pendingstep->get_submitted_data();
-        $newdata = qbehaviour_opaque_fix_up_submitted_data($newdata, $pendingstep);
+        $newdata = qbehaviour_webwork_opaque_fix_up_submitted_data($newdata, $pendingstep);
 
         // If an omact_ button has been clicked, never treat this as a duplicate submission.
-        if (qbehaviour_opaque_response_contains_om_action($newdata)) {
+        if (qbehaviour_webwork_opaque_response_contains_om_action($newdata)) {
             return false;
         }
 
         $laststep = $this->qa->get_last_step();
         $olddata = $laststep->get_submitted_data();
-        $olddata = qbehaviour_opaque_fix_up_submitted_data($olddata, $laststep);
+        $olddata = qbehaviour_webwork_opaque_fix_up_submitted_data($olddata, $laststep);
         return question_utils::arrays_have_same_keys_and_values($newdata, $olddata);
-    }
+    }*/
 
     public function summarise_action(question_attempt_step $step) {
         if ($step->has_behaviour_var('_randomseed')) {
@@ -134,7 +134,7 @@ class qbehaviour_opaque extends question_behaviour {
             return $step->get_qt_var('omact_ok');
 
         } else {
-            $summary = $this->question->summarise_response(qbehaviour_opaque_state::submitted_data($step));
+            $summary = $this->question->summarise_response(qbehaviour_webwork_opaque_state::submitted_data($step));
             if ($this->step_has_a_submitted_response($step)) {
                 return get_string('submitted', 'question', $summary);
             } else {
@@ -150,11 +150,11 @@ class qbehaviour_opaque extends question_behaviour {
         } else if ($pendingstep->has_behaviour_var('comment')) {
             return $this->process_comment($pendingstep);
 
-        } else if ($this->is_same_response($pendingstep) ||
+        } /*else if ($this->is_same_response($pendingstep) ||
                $this->qa->get_state()->is_finished()) {
             return question_attempt::DISCARD;
 
-        } else {
+        }*/ else {
             return $this->process_remote_action($pendingstep);
         }
     }
@@ -177,7 +177,7 @@ class qbehaviour_opaque extends question_behaviour {
     }
 
     public function process_remote_action(question_attempt_pending_step $pendingstep) {
-        $opaquestate = new qbehaviour_opaque_state($this->qa, $pendingstep);
+        $opaquestate = new qbehaviour_webwork_opaque_state($this->qa, $pendingstep);
 
         // We use resultstmp for a correct grading in Moodle, process is called in opaquestate.php
 
@@ -259,7 +259,7 @@ class qbehaviour_opaque extends question_behaviour {
 
         } else {
             $foundomact = false;
-            foreach (qbehaviour_opaque_state::submitted_data($step) as $name => $value) {
+            foreach (qbehaviour_webwork_opaque_state::submitted_data($step) as $name => $value) {
                 if ($name === 'omact_ok') {
                     // This is a Try again state.
                     return false;

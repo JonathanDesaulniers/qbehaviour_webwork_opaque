@@ -17,21 +17,22 @@
 /**
  * Version information for the Opaque question behaviour.
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2006 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+//defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022041102;
-$plugin->requires  = 2017111300;
-$plugin->component = 'qbehaviour_opaque';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'R13-V1.13.2';
+$plugin->version   = 2023010100;
+//$plugin->requires  = 2021051700;
+$plugin->component = 'qbehaviour_webwork_opaque';
+$plugin->maturity  = MATURITY_BETA;
+$plugin->release   = '1.1.0-beta';
 
 $plugin->dependencies = array(
-    'qtype_opaque' => 2018081400,
+    'qtype_webwork_opaque' => 2023010100,
 );
+$plugin->supported = [311, 400];      //  Moodle 3.11+ are supported.
 
 $plugin->outestssufficient = true;

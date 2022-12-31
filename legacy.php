@@ -17,13 +17,10 @@
 /**
  * Defines functions that are used to apply historic hacks
  *
- * @package   qbehaviour_opaque
+ * @package   qbehaviour_webwork_opaque
  * @copyright 2006 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Hacks used to clean-up the HTML.
@@ -31,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param object $opaquestate the current Opaque state.
  * @return string the cleaned-up HTML.
  */
-function qbehaviour_opaque_hacks_filter_xhtml($xhtml, $opaquestate) {
+function qbehaviour_webwork_opaque_hacks_filter_xhtml($xhtml, $opaquestate) {
     // TODO this is a nasty hack. Flash uses & as a separator in the FlashVars string,
     // so we have to replce the &amp;s with %26s in this one place only. So for now
     // do it with a regexp. Longer term, it might be better to changes the file.php urls
@@ -58,7 +55,7 @@ function qbehaviour_opaque_hacks_filter_xhtml($xhtml, $opaquestate) {
 
         $tinymce = new tinymce_texteditor();
         $tinymceurl = new moodle_url('/lib/editor/tinymce/tiny_mce/' . $tinymce->version . '/tiny_mce_src.js');
-        $settingsurl = new moodle_url('/question/behaviour/opaque/tinymcesettings.php');
+        $settingsurl = new moodle_url('/question/behaviour/webwork_opaque/tinymcesettings.php');
 
         $replaces = array(
             '%%TINYMCE%%/tiny_mce_src.js' => $tinymceurl->out(),
@@ -90,7 +87,7 @@ function qbehaviour_opaque_hacks_filter_xhtml($xhtml, $opaquestate) {
  * http://java.net/projects/openmark/sources/svn/content/trunk/src/util/misc/UserAgent.java
  * @return string class to add to the HTML.
  */
-function qbehaviour_opaque_legacy_browser_type() {
+function qbehaviour_webwork_opaque_legacy_browser_type() {
     if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
         return 'unknown';
     }
@@ -122,8 +119,8 @@ function qbehaviour_opaque_legacy_browser_type() {
  * @param object $response the response.
  * @return the updated response.
  */
-function qbehaviour_opaque_hacks_filter_response($response, $opaquestate) {
-    $response->XHTML = qbehaviour_opaque_hacks_filter_xhtml($response->XHTML, $opaquestate);
+function qbehaviour_webwork_opaque_hacks_filter_response($response, $opaquestate) {
+    $response->XHTML = qbehaviour_webwork_opaque_hacks_filter_xhtml($response->XHTML, $opaquestate);
 
     // Process the resources.
     // TODO remove this. Evil hack. IE cannot cope with : and other odd characters
@@ -157,7 +154,7 @@ function qbehaviour_opaque_hacks_filter_response($response, $opaquestate) {
  * @param question_attempt_step $step a step.
  * @return array approximately $step->get_submitted_data().
  */
-function qbehaviour_opaque_fix_up_submitted_data(array $response, question_attempt_step $step) {
+function qbehaviour_webwork_opaque_fix_up_submitted_data(array $response, question_attempt_step $step) {
     // By default, OpenMark radio buttons get the name '_rg', whcih breaks
     // one of the assumptions of the qutesion engine, so we have to manually
     // include it when doing get_submitted_data.
@@ -171,7 +168,7 @@ function qbehaviour_opaque_fix_up_submitted_data(array $response, question_attem
  * @param array $response response data.
  * @return bool whether this submission contains an Om button click.
  */
-function qbehaviour_opaque_response_contains_om_action(array $response) {
+function qbehaviour_webwork_opaque_response_contains_om_action(array $response) {
     foreach ($response as $key => $ignored) {
         if (strpos($key, 'omact_') === 0) {
             return true;
