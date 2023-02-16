@@ -30,9 +30,6 @@ $plugin->component = 'qbehaviour_webwork_opaque';
 $plugin->maturity  = MATURITY_BETA;
 $plugin->release   = '1.1.0-beta';
 
-$plugin->dependencies = array(
-    'qtype_webwork_opaque' => 2023010100,
-);
 $plugin->supported = [311, 400];      //  Moodle 3.11+ are supported.
 
 $plugin->outestssufficient = true;
