@@ -24,12 +24,14 @@
 
 //defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2023010100;
+$plugin->version   = 2023072001;
 //$plugin->requires  = 2021051700;
 $plugin->component = 'qbehaviour_webwork_opaque';
 $plugin->maturity  = MATURITY_BETA;
-$plugin->release   = '1.1.0-beta';
+$plugin->release   = '1.1.1-beta';
 
-$plugin->supported = [311, 400];      //  Moodle 3.11+ are supported.
+$plugin->supported = [311, 400, 410];      //  Moodle 3.11+ are supported.
+
+// Only work with WeBWorK 2.17+
 
 $plugin->outestssufficient = true;

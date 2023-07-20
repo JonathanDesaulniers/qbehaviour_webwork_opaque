@@ -1,5 +1,11 @@
 # Change log for the The Opaque question behaviour
 
+## Change in V1.1.1
+
+* Plugin now work only with installation of WeBWorK 2.17+
+* Added MathView editor to webwork problem
+* Added graphtool problem
+
 ## Changes in R13-V1.13.2
 
 * Update to use the show hint, show solution, show solution after test and the exam mode features (see question type webwork_opaque change.md)

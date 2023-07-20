@@ -58,7 +58,8 @@ class qbehaviour_webwork_opaque_renderer extends qbehaviour_renderer {
                         link.type = "text/css";
                         link.href = "' . addslashes_js($cssurl) . '";
                         document.getElementsByTagName("head")[0].appendChild(link);
-                    })()');
+                    })();
+                    var qPrefix="' . $qa->get_field_prefix() . '";');
         }
 
         return html_writer::tag('div', $javascript . $opaquestate->get_xhtml(),
